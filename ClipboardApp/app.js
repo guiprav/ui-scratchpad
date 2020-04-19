@@ -8,6 +8,11 @@ window.MainScreen = class MainScreen extends d.Component {
 
   mainInputValue = '';
 
+  asideLinkClasses = color => `
+    text-${color}-600 hover:text-${color}-600
+    opacity-75 hover:opacity-100
+  `;
+
   classes = {
     root: `my-10 container`,
     panel: `panel is-primary`,
@@ -17,24 +22,18 @@ window.MainScreen = class MainScreen extends d.Component {
     mainInput: `input is-primary`,
     deviceBlock: `panel-block`,
     itemIconWrapper: `panel-icon`,
+    deviceIcon: `fa fa-laptop`,
     itemBlockContents: `flex justify-between items-center w-full`,
     itemLabel: `text-sm opacity-75`,
     itemAsides: `text-xs`,
-    unpairLink: `text-red-600 hover:text-red-600 opacity-75 hover:opacity-100`,
-    sendLink: `text-blue-600 hover:text-blue-600 opacity-75 hover:opacity-100`,
-  };
-
-  iconClasses = {
-    device: {
-      laptop: 'fa fa-laptop',
-      phone: 'fa fa-mobile',
-    },
+    unpairLink: this.asideLinkClasses('red'),
+    sendLink: this.asideLinkClasses('blue'),
   };
 
   renderItemIcon = (type, x) => d.el('div', {
     class: this.classes.itemIconWrapper,
   }, [
-    d.el('i', { class: this.iconClasses[type][x.icon || x.type] }),
+    d.el('i', { class: this.classes.deviceIcon }),
   ]);
 
   render = () => d.el('div', {
@@ -62,24 +61,23 @@ window.MainScreen = class MainScreen extends d.Component {
         class: this.classes.deviceBlock,
       }, [
         this.renderItemIcon('device', x),
+
         d.el('div', { class: this.classes.itemBlockContents }, [
           d.el('div', { class: this.classes.itemLabel }, [x.name]),
 
-          d.if(
-            () => this.mainInputValue === '',
+          d.el('div', { class: this.classes.itemAsides }, [
+            d.if(
+              () => this.mainInputValue === '',
 
-            d.el('div', { class: this.classes.itemAsides }, [
               d.el('a', { class: this.classes.unpairLink, href: '#' }, [
                 'Unpair',
               ]),
-            ]),
 
-            d.el('div', { class: this.classes.itemAsides }, [
               d.el('a', { class: this.classes.sendLink, href: '#' }, [
                 'Send',
               ]),
-            ]),
-          ),
+            ),
+          ]),
         ]),
       ])),
     ]),
